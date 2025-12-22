@@ -28,8 +28,8 @@ export default function Navbar() {
           <Image
             src={logo1}
             alt="GPPT Nepal Logo"
-            width={42}
-            height={42}
+            width={48}
+            height={48}
             className="rounded-md object-contain"
             priority
           />
@@ -67,8 +67,8 @@ export default function Navbar() {
           <Image
             src={logo2}
             alt="Partner Logo"
-            width={42}
-            height={42}
+            width={48}
+            height={48}
             className="rounded-md object-contain hidden sm:block"
           />
         </div>

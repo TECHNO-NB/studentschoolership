@@ -197,8 +197,8 @@ export default function ScholarshipInfoPage() {
             <Section title={lang === "en" ? "8–11. Authority & Contact" : "८–११. संस्था तथा सम्पर्क"}>
               <p className="font-medium">
                 {lang === "en"
-                  ? "Organized by: Guru Parasurama Peedam Trust Nepal (NGO)"
-                  : "आयोजक: गुरु परशुराम पीठम ट्रस्ट नेपाल (NGO)"}
+                  ? "Organized by: Guru Parasurama Peedam Trust Nepal (INGO)"
+                  : "आयोजक: गुरु परशुराम पीठम ट्रस्ट नेपाल (INGO)"}
               </p>
               <p className="font-medium">
                 {lang === "en"
