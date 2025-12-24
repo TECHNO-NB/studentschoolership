@@ -52,7 +52,11 @@ export default function Navbar() {
             <Link href="/" className={linkClass("/")}>
               Home
             </Link>
+           
           </nav>
+            <Link href="/volunteer" className={linkClass("/volunteer")}>
+              Volunteer
+            </Link>
 
           <Link href="/register">
             <Button
