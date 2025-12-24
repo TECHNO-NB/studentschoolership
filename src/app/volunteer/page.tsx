@@ -167,7 +167,7 @@ export default function Page() {
               <Button onClick={() => router.push("/volunteer-register")} size="lg" className="bg-yellow-500 text-black hover:bg-yellow-400 font-bold">
                 {t.buttons.apply}
               </Button>
-              <Button onClick={() => router.push("/about")} size="lg" variant="outline" className="border-white bg-transparent text-white hover:bg-white hover:text-black">
+              <Button onClick={() => router.push("/volunteer-info")} size="lg" variant="outline" className="border-white bg-transparent text-white hover:bg-white hover:text-black">
                 {t.buttons.learn}
               </Button>
             </div>
