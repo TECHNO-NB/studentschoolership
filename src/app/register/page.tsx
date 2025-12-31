@@ -400,22 +400,6 @@ export default function RegisterPage() {
 
               {/* SIGNATURE */}
               <Section title={t.signatures}>
-                <div>
-                  <Label>{t.studentSign}</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, "studentSign")}
-                    required
-                  />
-                  {form.studentSign && (
-                    <img
-                      src={form.studentSign}
-                      alt="Student Signature"
-                      className="mt-2 h-20 border"
-                    />
-                  )}
-                </div>
 
                 <InputField
                   label={t.date}
@@ -425,7 +409,7 @@ export default function RegisterPage() {
                 />
 
                 <div>
-                  <Label>{t.parentSign}</Label>
+                  <Label>{t.parentSign} (1Mb)</Label>
                   <Input
                     type="file"
                     accept="image/*"
