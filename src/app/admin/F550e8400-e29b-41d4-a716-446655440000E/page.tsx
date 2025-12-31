@@ -84,7 +84,7 @@ export default function ApplicationsList() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((app) => (
+                {data.length > 0 && data.map((app) => (
                   <TableRow key={app._id}>
                     <TableCell className="font-medium">
                       {app.createdAt ? format(new Date(app.createdAt), "yyyy-MM-dd") : "N/A"}
