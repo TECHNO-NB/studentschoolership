@@ -398,40 +398,7 @@ export default function RegisterPage() {
                 </div>
               </Section>
 
-              {/* SIGNATURE */}
-              <Section title={t.signatures}>
-
-                <InputField
-                  label={t.date}
-                  type="date"
-                  value={form.studentDate}
-                  onChange={(v) => handleChange("studentDate", v)}
-                />
-
-                <div>
-                  <Label>{t.parentSign} (1Mb)</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, "parentSign")}
-                    required
-                  />
-                  {form.parentSign && (
-                    <img
-                      src={form.parentSign}
-                      alt="Parent Signature"
-                      className="mt-2 h-20 border"
-                    />
-                  )}
-                </div>
-
-                <InputField
-                  label={t.date}
-                  type="date"
-                  value={form.parentDate}
-                  onChange={(v) => handleChange("parentDate", v)}
-                />
-              </Section>
+           
 
               <Button
                 type="submit"
