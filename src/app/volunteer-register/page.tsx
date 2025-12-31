@@ -379,33 +379,7 @@ export default function VolunteerRegisterPage() {
                 </div>
               </Section>
 
-              {/* 6. SIGNATURE */}
-              <Section title={t.signatures}>
-                <div>
-                  <Label>{t.applicantSign}</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, "applicantSign")}
-                    required
-                    className="mt-2"
-                  />
-                  {form.applicantSign && (
-                    <img
-                      src={form.applicantSign}
-                      alt="Signature"
-                      className="mt-4 h-16 border border-dashed border-gray-400 p-1"
-                    />
-                  )}
-                </div>
-
-                <InputField
-                  label={t.date}
-                  type="date"
-                  value={form.date}
-                  onChange={(v) => handleChange("date", v)}
-                />
-              </Section>
+           
 
               <Button
                 type="submit"
