@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { format } from "date-fns"; // Optional: npm install date-fns
+import { format } from "date-fns";
 import {
   Table,
   TableBody,
@@ -23,20 +23,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, Eye, FileText, Phone } from "lucide-react";
-
+import { Loader2, Eye, FileText } from "lucide-react";
 
 export default function ApplicationsList() {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
 
-  // 1. Fetch Data
+  // FETCH DATA
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Ensure this matches your Express server port (4000 based on your last code)
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/applications`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/applications`
+        );
         const json = await res.json();
         setData(json);
       } catch (error) {
@@ -47,6 +47,29 @@ export default function ApplicationsList() {
     };
     fetchData();
   }, []);
+
+  // DELETE HANDLER
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this application?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${id}`,
+        { method: "DELETE" }
+      );
+
+      if (!res.ok) throw new Error("Delete failed");
+
+      // UPDATE UI
+      setData((prev) => prev.filter((item) => item._id !== id));
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Failed to delete application");
+    }
+  };
 
   if (loading) {
     return (
@@ -69,6 +92,7 @@ export default function ApplicationsList() {
             </p>
           </div>
         </CardHeader>
+
         <CardContent>
           <div className="rounded-md border">
             <Table>
@@ -83,45 +107,71 @@ export default function ApplicationsList() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
-                {data.length > 0 && data.map((app) => (
-                  <TableRow key={app._id}>
-                    <TableCell className="font-medium">
-                      {app.createdAt ? format(new Date(app.createdAt), "yyyy-MM-dd") : "N/A"}
-                    </TableCell>
-                    <TableCell>{app.name}</TableCell>
-                    <TableCell>{app.school}</TableCell>
-                    <TableCell>{app.district}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col text-xs">
-                        <span>{app.contact}</span>
-                        <span className="text-muted-foreground">{app.email}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={app.scholarshipType === "Need-based" ? "destructive" : "default"}>
-                        {app.scholarshipType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {/* VIEW DETAILS SHEET */}
-                      <Sheet>
-                        <SheetTrigger asChild>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            onClick={() => setSelectedApp(app)}
-                          >
-                            <Eye className="mr-2 h-4 w-4" /> View
-                          </Button>
-                        </SheetTrigger>
-                        <SheetContent className="w-100 sm:w-[6xl] px-4 overflow-y-auto">
-                           {selectedApp && <ApplicationDetails app={selectedApp} />}
-                        </SheetContent>
-                      </Sheet>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {data.length > 0 &&
+                  data.map((app) => (
+                    <TableRow key={app._id}>
+                      <TableCell className="font-medium">
+                        {app.createdAt
+                          ? format(new Date(app.createdAt), "yyyy-MM-dd")
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell>{app.name}</TableCell>
+                      <TableCell>{app.school}</TableCell>
+                      <TableCell>{app.district}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col text-xs">
+                          <span>{app.contact}</span>
+                          <span className="text-muted-foreground">
+                            {app.email}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            app.scholarshipType === "Need-based"
+                              ? "destructive"
+                              : "default"
+                          }
+                        >
+                          {app.scholarshipType}
+                        </Badge>
+                      </TableCell>
+
+                      {/* ACTIONS */}
+                      <TableCell className="text-right space-x-2">
+                        {/* VIEW */}
+                        <Sheet>
+                          <SheetTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setSelectedApp(app)}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View
+                            </Button>
+                          </SheetTrigger>
+                          <SheetContent className="w-100 sm:w-[6xl] px-4 overflow-y-auto">
+                            {selectedApp && (
+                              <ApplicationDetails app={selectedApp} />
+                            )}
+                          </SheetContent>
+                        </Sheet>
+
+                        {/* DELETE */}
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDelete(app._id)}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </div>
@@ -131,7 +181,7 @@ export default function ApplicationsList() {
   );
 }
 
-// --- SUB-COMPONENT: DETAIL VIEW ---
+// ---------------- DETAIL VIEW ----------------
 
 function ApplicationDetails({ app }: { app: any }) {
   return (
@@ -141,12 +191,12 @@ function ApplicationDetails({ app }: { app: any }) {
           <FileText className="h-6 w-6" /> {app.name}
         </SheetTitle>
         <SheetDescription>
-          Submitted on {app.createdAt ? format(new Date(app.createdAt), "PPP") : "N/A"}
+          Submitted on{" "}
+          {app.createdAt ? format(new Date(app.createdAt), "PPP") : "N/A"}
         </SheetDescription>
       </SheetHeader>
 
       <div className="space-y-6">
-        {/* Personal Info */}
         <Section title="Student Information">
           <DetailRow label="Gender" value={app.gender} />
           <DetailRow label="Date of Birth" value={app.dob} />
@@ -155,7 +205,6 @@ function ApplicationDetails({ app }: { app: any }) {
           <DetailRow label="School Address" value={app.schoolAddress} />
         </Section>
 
-        {/* Address */}
         <Section title="Address">
           <DetailRow label="Province" value={app.province} />
           <DetailRow label="District" value={app.district} />
@@ -164,7 +213,6 @@ function ApplicationDetails({ app }: { app: any }) {
           <DetailRow label="Full Address" value={app.fullAddress} />
         </Section>
 
-        {/* Parent Info */}
         <Section title="Parent / Guardian">
           <DetailRow label="Father" value={app.father} />
           <DetailRow label="Mother" value={app.mother} />
@@ -174,47 +222,30 @@ function ApplicationDetails({ app }: { app: any }) {
           <DetailRow label="WhatsApp" value={app.whatsapp} />
         </Section>
 
-        {/* Scholarship Info */}
         <Section title="Scholarship Details">
           <DetailRow label="Type" value={app.scholarshipType} />
           <DetailRow label="Previous Recipient" value={app.previous} />
         </Section>
-
-        {/* Signatures */}
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg text-primary">Signatures</h3>
-          <Separator />
-          <div className="grid grid-cols-2 gap-4 mt-4">
-            <div className="border p-2 rounded-lg text-center">
-              <p className="text-xs text-muted-foreground mb-2">Student</p>
-              {app.studentSign ? (
-                <img src={app.studentSign} alt="Student Sign" className="h-16 mx-auto object-contain" />
-              ) : <span className="text-red-500 text-xs">Missing</span>}
-              <p className="text-xs mt-1">{app.studentDate}</p>
-            </div>
-            <div className="border p-2 rounded-lg text-center">
-              <p className="text-xs text-muted-foreground mb-2">Parent</p>
-              {app.parentSign ? (
-                <img src={app.parentSign} alt="Parent Sign" className="h-16 mx-auto object-contain" />
-              ) : <span className="text-red-500 text-xs">Missing</span>}
-              <p className="text-xs mt-1">{app.parentDate}</p>
-            </div>
-          </div>
-        </div>
       </div>
-      
-      {/* Print Button */}
+
       <div className="mt-8 mb-4">
         <Button className="w-full" onClick={() => window.print()}>
-            Print Application
+          Print Application
         </Button>
       </div>
     </ScrollArea>
   );
 }
 
-// Helper Components for Cleaner Code
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// ---------------- HELPERS ----------------
+
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-3">
       <h3 className="font-semibold text-lg text-primary">{title}</h3>
@@ -226,10 +257,18 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string | number | undefined }) {
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number | undefined;
+}) {
   return (
     <div className="flex flex-col">
-      <span className="text-muted-foreground text-xs uppercase tracking-wide">{label}</span>
+      <span className="text-muted-foreground text-xs uppercase tracking-wide">
+        {label}
+      </span>
       <span className="font-medium">{value || "-"}</span>
     </div>
   );
