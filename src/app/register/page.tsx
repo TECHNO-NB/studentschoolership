@@ -217,12 +217,6 @@ export default function RegisterPage() {
       toast.error("Please agree to the declaration!");
       return;
     }
-
-    if (!form.studentSign || !form.parentSign) {
-      toast.error("Please upload both signatures!");
-      return;
-    }
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/register`, {
         method: "POST",

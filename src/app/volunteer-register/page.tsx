@@ -202,11 +202,6 @@ export default function VolunteerRegisterPage() {
       return;
     }
 
-    if (!form.applicantSign) {
-      toast.error(lang === 'en' ? "Please upload your signature!" : "कृपया आफ्नो हस्ताक्षर अपलोड गर्नुहोस्!");
-      return;
-    }
-
     try {
       // Replace with your actual Volunteer API endpoint
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/volunteer-register`, {
